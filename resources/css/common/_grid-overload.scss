@@ -1,0 +1,17 @@
+@media (min-width: 768px) {
+  .container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .row:not(.no-gutters) {
+    margin-right: -0.5rem;
+    margin-left: -0.5rem;
+  }
+
+  .row:not(.no-gutters) > .col,
+  .row:not(.no-gutters) > [class*="col-"] {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+}

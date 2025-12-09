@@ -1,0 +1,53 @@
+/**
+    Main css file
+*/
+
+input[data-readonly] {
+    cursor: pointer;
+    background: white;
+    border: none;
+    box-shadow: none;
+    border-bottom: 1px solid #eeeeee;
+}
+
+input[data-readonly]:focus {
+    z-index: unset;
+}
+
+input[data-readonly] {
+  pointer-events: none;
+}
+
+#spost_file_area:hover >  div #spost_file_button {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+#spost_file_button:focus {
+    box-shadow:none;
+}
+
+#wpwrap {
+    background: #f1f1f1;
+}
+
+label {
+    cursor: default;
+}
+
+label.clickable {
+    cursor: pointer;
+}
+
+.label-info {
+  background: mediumaquamarine;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.vertical-top {
+  vertical-align: top;
+}
+
+@import url("./waste/waste.css");

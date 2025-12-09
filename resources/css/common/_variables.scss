@@ -1,0 +1,30 @@
+/** Import Bootstrap functions */
+@import "bootstrap/scss/functions";
+
+/** Colors */
+$primary: #10ab56;
+$primary-light: #10ab56;
+$primary-dark: #26874c;
+$brand-blue: #34495e;
+$brand-orange-light: #f1c40f;
+$brand-orange-dark: #f39c12;
+$text-title: #2c3e50;
+$text-body: #212e3b;
+$text-muted-dark-bg: #cfd4d9;
+$text-muted-light-bg: #78848f;
+$bg-color: #f4f5f6;
+$border-color: #cfd4d9;
+$secondary: #cfd4d9;
+
+/** Bootstrap navbar fix (https://git.io/fADqW) */
+$navbar-dark-toggler-icon-bg: none;
+$navbar-light-toggler-icon-bg: none;
+
+/** Fonts */
+$titles-font-family: "Raleway", sans-serif;
+$body-font-family: "Literata", serif;
+
+$gutter: 1rem;
+$radius: 2px;
+$big-shadow: 0 5px 30px rgba(52, 73, 94, 0.2);
+$header-height: 6rem;

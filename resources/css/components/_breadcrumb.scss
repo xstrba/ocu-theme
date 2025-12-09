@@ -1,0 +1,21 @@
+.b-breadcrumb {
+  border-top: 1px dashed $text-muted-dark-bg;
+  background-color: transparent;
+  border-radius: 0;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-family: $titles-font-family;
+  font-weight: 500;
+}
+
+.b-breadcrumb a {
+  color: $primary-dark;
+}
+
+.b-breadcrumb a:hover {
+  text-decoration: none;
+}
+
+.b-breadcrumb .breadcrumb_last {
+  color: $text-muted-light-bg;
+}

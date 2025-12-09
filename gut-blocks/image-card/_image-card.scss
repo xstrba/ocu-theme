@@ -1,0 +1,106 @@
+.wp-block-rudno-image-card {
+  background: #fff;
+  border-radius: $radius;
+  border: 1px solid $border-color;
+  display: flex;
+  flex-direction: column;
+
+  @include media-breakpoint-up(md) {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  &__content-wrapper {
+    width: 100%;
+    padding: 1.5rem;
+
+    @include media-breakpoint-up(md) {
+      width: 50%;
+      height: 100%;
+    }
+
+    @include media-breakpoint-up(lg) {
+      width: 65%;
+    }
+
+    @include media-breakpoint-up(xl) {
+      width: 50%;
+    }
+  }
+
+  &__image-wrapper {
+    background: #f2f2f2;
+    position: relative;
+    width: 100%;
+    min-height: 12rem;
+
+    @include media-breakpoint-up(md) {
+      width: 50%;
+    }
+
+    @include media-breakpoint-up(lg) {
+      width: 35%;
+    }
+
+    @include media-breakpoint-up(xl) {
+      width: 50%;
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: 100% !important;
+    object-fit: cover;
+    object-position: 50% 50%;
+    opacity: 0.5;
+  }
+
+  &__select-image {
+    position: absolute;
+    display: block;
+    width: 80%;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &__title {
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+    font-family: $titles-font-family;
+    color: $text-title;
+    font-size: 1.5rem !important;
+    line-height: 1.2 !important;
+    font-weight: 900;
+  }
+
+  &__content {
+    margin-top: 0 !important;
+  }
+
+  &__button-wrapper {
+    @extend .btn;
+    @extend .btn-secondary;
+
+    width: 100%;
+
+    &.set {
+      @extend .btn-primary;
+    }
+
+    &.empty {
+      @extend .btn-secondary;
+    }
+  }
+
+  &__button-label {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  &__button-link {
+    font-size: 0.875rem;
+    width: 100%;
+  }
+
+}

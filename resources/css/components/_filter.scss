@@ -1,0 +1,13 @@
+.b-docsfilter {
+  @extend .btn-group;
+}
+
+.b-docsfilter__item {
+  @extend .btn;
+  @extend .btn-outline-secondary;
+}
+
+.b-docsfilter__item.active {
+  @extend .btn-outline-secondary;
+  @extend .active;
+}

@@ -1,0 +1,22 @@
+/** Footer Navigation */
+.footer-navigation {
+  background-color: $brand-blue;
+}
+
+.footer-navigation .nav-link {
+  color: $text-muted-dark-bg;
+}
+
+/** Footer Credits */
+.footer-credits {
+  background-color: $text-title;
+}
+
+.footer-credits .brand-link,
+.footer-credits p {
+  opacity: 0.5;
+}
+
+.footer-credits .brand-link:hover {
+  opacity: 1;
+}

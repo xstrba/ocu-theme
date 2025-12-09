@@ -1,0 +1,63 @@
+body {
+  height: unset;
+  font-size: 1rem;
+  line-height: 1.1rem;
+  min-height: 100vh;
+  display: flex;
+  background: #2c3e50;
+}
+
+#login {
+  width: 320px;
+  min-width: 320px;
+  background: #fff;
+  padding: 48px 96px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+
+#login_error, .login .message {
+  margin: 24px 0 0 0 !important;
+}
+
+.login #backtoblog, .login #nav {
+  font-size: 1rem;
+}
+
+.login label {
+  font-size: 1rem;
+}
+
+.login h1 a {
+  width: 132px;
+  height: 146px;
+  background-image: url('../images/Logo.svg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: auto;
+}
+
+.login form {
+  background: unset;
+  border: unset;
+  box-shadow: unset;
+  padding: 0;
+  margin: 48px 0 24px;
+}
+
+.login .privacy-policy-page-link {
+  margin: 8px 0 0 0;
+}
+
+.wp-core-ui .button-secondary {
+  color: #2c3e50;
+}
+
+.wp-core-ui .button-primary {
+  background: #2c3e50;
+  border-color: #2c3e50;
+}

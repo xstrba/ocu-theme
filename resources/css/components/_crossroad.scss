@@ -1,0 +1,110 @@
+.b-crossroad {
+  background-color: #fff;
+  box-shadow: 0 5px 30px rgba(52, 73, 94, 0.2);
+}
+
+.b-crossroad__list {
+  list-style-type: none;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.b-crossroad__list__item {
+  padding: 0 !important;
+}
+
+.b-crossroad__list__item:not(:last-child) {
+  border-bottom: 1px solid $border-color;
+}
+
+@media (min-width: 768px) {
+  .b-crossroad__list__item:not(:last-child) {
+    border-right: 1px solid $border-color;
+    border-bottom: 0;
+  }
+}
+
+.b-road {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem;
+  text-decoration: none;
+  height: 100%;
+}
+
+.b-road:hover {
+  text-decoration: none;
+}
+
+.b-road__icon {
+  color: $primary;
+}
+
+.b-road__title {
+  font-size: 1.5rem;
+  line-height: 1.2;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.b-road__desc {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.b-road__button {
+  @extend .btn;
+  @extend .btn-outline-primary;
+
+  margin-top: auto;
+  border-width: 2px;
+  font-weight: 700;
+}
+
+.b-road:hover .b-road__button {
+  color: #fff;
+  background-color: $primary;
+  text-decoration: none;
+}
+
+/** Highlighted road **/
+.b-road.b-road--highlight {
+  background-color: $text-body;
+
+  & .b-road__icon {
+    color: $brand-orange-dark;
+  }
+
+  & .b-road__title {
+    color: #fff;
+  }
+
+  & .b-road__desc {
+    color: #fff;
+  }
+
+  & .b-road__button {
+    color: $brand-orange-dark;
+    border-color: $brand-orange-dark;
+  }
+}
+
+.b-road.b-road--highlight:hover .b-road__button {
+  background-color: $brand-orange-dark;
+  color: $text-body;
+}
+
+/** Lonely road **/
+.b-lonely-road {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  border-radius: $radius;
+  border: 1px solid $border-color;
+  width: 100%;
+  height: 100%;
+}

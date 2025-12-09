@@ -1,0 +1,31 @@
+.b-person {
+  background: #fff;
+  border-radius: $radius;
+  padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .b-person {
+    padding: 3rem;
+  }
+}
+
+.b-person__name {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.b-person__role {
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+.b-person__phone {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.b-person__mail {
+  font-weight: 700;
+  margin-bottom: 0;
+}

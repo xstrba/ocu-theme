@@ -1,0 +1,70 @@
+.b-image-card {
+  background: #fff;
+  border-radius: $radius;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &__image-wrapper {
+    position: relative;
+    min-height: 12rem;
+    width: 100%;
+  }
+
+  &__content-wrapper {
+    width: 100%;
+    padding: 1.5rem;
+    word-break: break-word;
+
+    @include media-breakpoint-up(lg) {
+      padding: 3rem;
+    }
+  }
+
+  &:not(.b-image-card--vertical) {
+    @include media-breakpoint-up(md) {
+      flex-direction: row;
+      align-items: stretch;
+    }
+
+    & .b-image-card__image-wrapper {
+      @include media-breakpoint-up(md) {
+        width: 50%;
+      }
+
+      @include media-breakpoint-up(lg) {
+        width: 35%;
+      }
+
+      @include media-breakpoint-up(xl) {
+        width: 50%;
+      }
+    }
+
+    & .b-image-card__content-wrapper {
+      @include media-breakpoint-up(md) {
+        width: 50%;
+      }
+
+      @include media-breakpoint-up(lg) {
+        width: 65%;
+      }
+
+      @include media-breakpoint-up(xl) {
+        width: 50%;
+      }
+    }
+  }
+
+  &__image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+
+  &__title {
+    @extend .h3;
+  }
+}

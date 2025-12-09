@@ -1,0 +1,31 @@
+.page-numbers {
+  margin-bottom: 0.25rem;
+
+  &:not(.dots) {
+    @extend .btn;
+  }
+
+  &.dots {
+    color: $text-muted-light-bg;
+    font-size: 0.875rem;
+    padding: 0 1rem;
+  }
+
+  &.current {
+    @extend .btn-outline-secondary;
+    @extend .active;
+  }
+
+  &.prev,
+  &.next {
+    @extend .btn-primary;
+
+    @include media-breakpoint-down(md) {
+      display: none;
+    }
+  }
+
+  &:not(.prev):not(.next):not(.current):not(.dots) {
+    @extend .btn-outline-secondary;
+  }
+}

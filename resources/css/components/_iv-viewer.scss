@@ -1,0 +1,29 @@
+.iv-fullscreen {
+  background: #fff;
+}
+
+.iv-image-view {
+  cursor: zoom-out;
+}
+
+.iv-fullscreen-close {
+  visibility: hidden;
+  cursor: zoom-out;
+}
+
+.iv-image {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: unset !important;
+  height: unset !important;
+  top: unset !important;
+  left: unset !important;
+}
+
+.iv-image-wrap {
+  width: inherit;
+  height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
