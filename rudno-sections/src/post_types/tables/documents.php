@@ -11,6 +11,7 @@ function edit_document_columns( $columns ): array
         'title' => 'Názov',
         'src' => 'Súbor',
 		'type' => 'Typ',
+        'author' => 'Autor',
 		'date' => __( 'Date' )
 	);
 }

@@ -4,7 +4,7 @@
 
   <!-- Page header (image, breadcrumb, headline) -->
   @include('partials.page-header', [
-    'docsfilter' => true
+    'docsfilter' => $template->usesYearlyFilter(),
   ])
 
   <!-- Zoznam dokumentov -->

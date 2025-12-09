@@ -3,7 +3,7 @@
 
   Accepts optional properties:
     $subtitle = html string or null
-    $docsfilter = true or null
+    $docsfilter = true or false or null
     $with_search = true or null
 
 --}}
@@ -11,7 +11,7 @@
 <?php
 /** @var \App\Services\GlobalDataResolver $globalDataResolver */
 
-$docsfilter ??= null;
+$docsfilter ??= false;
 $with_search ??= null;
 ?>
 
@@ -44,15 +44,16 @@ $with_search ??= null;
         <p class="b-page-header__subtitle">{!! $subtitle !!}</p>
       @endisset
 
-      @isset($docsfilter)
+      @if($docsfilter)
         @php
 
         $links = [];
+        $currPage = $currentPage();
 
-        foreach ($pagesYears() as $year) {
+        foreach ($pagesYears as $year) {
           $links[] = [
             'url' => '/dokumenty/' . get_queried_object()->slug . ($year === (int) date('Y') ? '' : "/$year"),
-            'active' => $currentPage() === $year,
+            'active' => $currPage === $year,
             'name' => $year
           ];
         }
@@ -64,7 +65,7 @@ $with_search ??= null;
           @slot('items', $links)
         @endcomponent
 
-      @endisset
+      @endif
 
       @isset($with_search)
         <div class="row">

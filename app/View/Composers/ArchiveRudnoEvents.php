@@ -27,7 +27,7 @@ class ArchiveRudnoEvents extends Composer
                 'date_from_clause' => [
                     'key' => '_date_from',
                     'compare' => '>=',
-                    'value' => \date('Y-m-d', \strtotime("last sunday midnight")),
+                    'value' => \date('Y-m-d', \strtotime("last sunday midnight -1 week")),
                 ],
                 'time_from_clause' => [
                     'key' => '_time_from',
