@@ -3,6 +3,17 @@
  * register custom post type adn styles and scripts
  */
 
+/**
+ * @var array<array-key, class-string<\Plugin\Common\Parents\AbstractServiceProvider>> $providers
+ */
+
+use Plugin\PostTypes\Repositories\PostTypesRepository;
+
+$providers = [
+    \Plugin\PostTypes\Providers\PostTypesServiceProvider::class,
+    \Plugin\OfficialBoard\Providers\OfficialBoardServiceProvider::class,
+];
+
 //document-post
 include('assets.php');
 
@@ -20,6 +31,12 @@ include('src/post_types/people.php');
 include('src/post_types/homepage-menu.php');
 include('src/post_types/tutorials.php');
 include('src/post_types/useful-links.php');
+
+$app = \Plugin\Common\Application::getInstance();
+
+foreach ($providers as $provider) {
+    $app->withServiceProvider(new $provider());
+}
 
 
 /*********************
@@ -76,13 +93,19 @@ function my_remove_wp_seo_meta_box() {
         $postTypes = get_post_types();
 
         foreach ($postTypes as $postType) {
-            if (substr($postType, 0, 6) === 'rudno-') {
-                add_filter( "postbox_classes_{$postType}_wpseo_meta", 'minify_my_metabox' );
+            if (str_starts_with($postType, 'rudno-')) {
+                remove_meta_box('wpcode-metabox-snippets', $postType, 'normal');
             }
+        }
+
+        foreach (\Plugin\Common\Application::getInstance()->getServiceContainer()->make(PostTypesRepository::class)
+            ->getAll() as $postType => $_) {
+            remove_meta_box('wpseo_meta', $postType, 'normal');
+            remove_meta_box('wpcode-metabox-snippets', $postType, 'normal');
         }
     }
 }
-add_action('add_meta_boxes', 'my_remove_wp_seo_meta_box', 100);
+add_action('add_meta_boxes', 'my_remove_wp_seo_meta_box', 1000);
 
 /**
  * Hide meta box on screen
@@ -100,10 +123,12 @@ function add_query_vars_filter( $vars ){
 }
 add_filter( 'query_vars', 'add_query_vars_filter' );
 
-function year_rewrite_tag() {
+$app->initCb(static function () {
     add_rewrite_tag('%year%', '([0-9]+)');
-}
-add_action('init', 'year_rewrite_tag', 10, 0);
+});
+
+$app->register();
+
 
 /**
  * Style login page

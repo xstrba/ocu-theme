@@ -13,12 +13,14 @@
 
 --}}
 
-<a href="{{ $url }}" @isset($blank) target="_blank" @endisset class="b-big-icon-link border-on-white-bg {{ $class ?? '' }}">
+<a href="{{ $url }}" @isset($blank) target="_blank" @endisset class="b-big-icon-link border-on-white-bg {{ $class ?? '' }}" title="{!! $label !!}">
   @if($icon)
     @component('ui.icon', [ 'size' => 'md-huge', 'name' => $icon, 'class' => 'b-big-icon-link__icon']) @endcomponent
   @endif
-  <span class="b-big-icon-link__label">{!! $label !!}</span>
-  @isset($subtitle)
-    <p class="mb-0 mt-3">{{ $subtitle }}</p>
-  @endisset
+  <div>
+    <span class="b-big-icon-link__label">{!! $label !!}</span>
+    @isset($subtitle)
+      <p class="mb-0 mt-1">{!! $subtitle !!}</p>
+    @endisset
+  </div>
 </a>

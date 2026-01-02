@@ -6,6 +6,9 @@
  /**
   * Loads base admin stzles
   */
+
+use Plugin\PostTypes\Repositories\PostTypesRepository;
+
 add_action( 'admin_enqueue_scripts', function() {
 
  // Enqueues general stylesheet
@@ -19,7 +22,10 @@ add_action( 'admin_enqueue_scripts', function() {
 function spost_image_enqueue($hook) {
     global $typenow;
 
-    if( substr( $typenow, 0, 6 ) === "rudno-" || $hook === 'toplevel_page_rudno_ou_info') {
+    $isInRepo = \Plugin\Common\Application::getInstance()->getServiceContainer()->make(PostTypesRepository::class)
+        ->hasPostType($typenow);
+
+    if( $isInRepo || substr( $typenow, 0, 6 ) === "rudno-" || $hook === 'toplevel_page_rudno_ou_info') {
         wp_enqueue_media();
         // Registers and enqueues the required javascript.
         wp_register_script( 'meta-box-image', get_template_directory_uri() . '/rudno-sections/assets/bootstrap-tagsinput/src/bootstrap-tagsinput.js', array( 'jquery' ) );
@@ -43,7 +49,11 @@ add_action( 'admin_enqueue_scripts', 'spost_image_enqueue' );
  */
 function rudno_scripts_eneque($hook) {
     global $typenow;
-    if( substr( $typenow, 0, 6 ) === "rudno-" || $hook === 'toplevel_page_rudno_ou_info') {
+
+    $isInRepo = \Plugin\Common\Application::getInstance()->getServiceContainer()->make(PostTypesRepository::class)
+        ->hasPostType($typenow);
+
+    if( $isInRepo || substr( $typenow, 0, 6 ) === "rudno-" || $hook === 'toplevel_page_rudno_ou_info') {
         // Registers and enqueues the required javascript.
         wp_register_script( 'rudno-main', get_template_directory_uri() . '/rudno-sections/assets/js/app.js', array( 'jquery' ) );
         wp_enqueue_script( 'rudno-main' );
@@ -66,7 +76,10 @@ add_action( 'admin_enqueue_scripts', 'rudno_scripts_eneque' );
 function rudno_style_enqueue($hook) {
     global $typenow;
 
-    if( substr( $typenow, 0, 6 ) === "rudno-" || $hook === 'toplevel_page_rudno_ou_info' ) {
+    $isInRepo = \Plugin\Common\Application::getInstance()->getServiceContainer()->make(PostTypesRepository::class)
+        ->hasPostType($typenow);
+
+    if( $isInRepo || substr( $typenow, 0, 6 ) === "rudno-" || $hook === 'toplevel_page_rudno_ou_info' ) {
 
         // Bootstrap css
         wp_enqueue_style( 'bootstrap', get_template_directory_uri() . '/rudno-sections/assets/bootstrap-4.3.1-dist/css/bootstrap.min.css' );

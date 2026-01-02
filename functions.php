@@ -2,11 +2,6 @@
 
 use Roots\Acorn\Application;
 
-/**
- * Register admin plugin
- */
-require_once "rudno-sections/rudno-sections.php";
-
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
@@ -35,6 +30,11 @@ require $composer;
 | the IoC container for the system binding all of the various parts.
 |
 */
+
+/**
+ * Register admin plugin
+ */
+require_once "rudno-sections/rudno-sections.php";
 
 Application::configure()
     ->withProviders([
