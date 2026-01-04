@@ -158,24 +158,30 @@ final class GlobalDataResolver
             $term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
             return $this->title = $term->name;
         }
+
         if (is_home()) {
             if ($home = get_option('page_for_posts', true)) {
                 return $this->title = get_the_title($home);
             }
             return $this->title = __('Nejnovšie príspevky', 'rudno-theme');
         }
+
         if (is_post_type_archive()) {
             return $this->title = post_type_archive_title('', false);
         }
+
         if (is_archive()) {
             return $this->title = get_the_archive_title();
         }
+
         if (is_search()) {
             return $this->title = sprintf(__('Výsledky hľadania <span class="text-muted-light-bg font-italic">„%s“</span>', 'rudno-theme'), get_search_query());
         }
+
         if (is_404()) {
             return $this->title = __('Stránka neexistuje', 'rudno-theme');
         }
+
         return $this->title = get_the_title();
     }
 }

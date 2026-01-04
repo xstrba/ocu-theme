@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Plugin\OfficialBoard\Registrars;
 
 use Plugin\Common\Application;
-use WP_Query;
 
 final class OfficialBoardTableRegistrar
 {

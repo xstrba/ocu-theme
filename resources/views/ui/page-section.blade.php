@@ -6,6 +6,7 @@
 
   Optional properties:
     $headline = section title (string)
+    $subheadline = section subtitle / perex (string)
     $id = section id (string)
     $white = white background setter (true or null)
     $last = bottom padding setter needed for last sections above the footer (true or null)
@@ -19,13 +20,26 @@
 $pt0 ??= false;
 ?>
 
-<section @isset($id) id="{{ $id }}" @endisset class="@isset($white) bg-white @endisset @isset($last) pb-5 @endisset @isset($class) {{ $class }} @endisset">
+<section
+  @isset($id) id="{{ $id }}" @endisset
+class="@isset($white) bg-white @endisset @isset($last) pb-5 @endisset @isset($class) {{ $class }} @endisset"
+>
   <div class="container @if($pt0) pb-5 @else py-5 @endif">
+
     @isset($headline)
       <div class="row">
-        <h2 class="col-12 mb-3 @isset($centered) text-center @endisset">{{ $headline }}</h2>
+        <div class="col-12 mb-3 @isset($centered) text-center @endisset">
+          <h2 class="mb-1">{{ $headline }}</h2>
+
+          @isset($subheadline)
+            <p class="lead mb-0">
+              {{ $subheadline }}
+            </p>
+          @endisset
+        </div>
       </div>
     @endisset
+
     <div class="row @isset($centered) justify-content-center @endisset">
       {{ $row_content }}
     </div>

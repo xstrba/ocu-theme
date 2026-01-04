@@ -2,6 +2,7 @@
 
 namespace App\View\Composers;
 
+use Plugin\OfficialBoard\Registrars\OfficialBoardRegistrar;
 use Plugin\OfficialBoard\Registrars\OfficialBoardTaxonomyRegistrar;
 use Roots\Acorn\View\Composer;
 
@@ -12,6 +13,19 @@ use Roots\Acorn\View\Composer;
  */
 class ArchiveOcuOfficialBoard extends Composer
 {
+    protected static $views = [
+        'archive-ocu-official-board',
+        'taxonomy-ocu-official-board-document-type',
+    ];
+
+    protected function merge(): array
+    {
+        return \array_merge(parent::merge(), [
+            'term_options' => $this->getTermOptions(),
+            'selected_term' => $this->selectedTerm(),
+        ]);
+    }
+
     /**
      * @param \WP_Post $post
      *
@@ -67,6 +81,64 @@ class ArchiveOcuOfficialBoard extends Composer
             $end = __(' výsledkov', 'ocu-theme');
         }
 
-        return $start . \number_format_i18n($totalPosts) . $end;
+        return $start . '<span class="font-weight-bold">' . \number_format_i18n($totalPosts) . '</span>' . $end;
+    }
+
+    /**
+     * @return array<int, array{label: string, url: string}>
+     */
+    private function getTermOptions(): array
+    {
+        $terms = get_terms([
+            'taxonomy' => OfficialBoardTaxonomyRegistrar::TAXONOMY,
+            'hide_empty' => false,
+        ]);
+
+        // Custom sort function
+        \usort($terms, static function(\WP_Term $a, \WP_Term $b): int {
+            if ($a->count > 0 && $b->count === 0) {
+                return -1;
+            }
+
+            if ($a->count === 0 && $b->count > 0) {
+                return 1;
+            }
+
+            return \strcmp($a->name, $b->name);
+        });
+
+        $count = 0;
+
+        /** @noinspection PhpArrayIndexImmediatelyRewrittenInspection */
+        $options = [
+            0 => [],
+        ];
+
+        foreach ($terms as $term) {
+            $count += $term->count;
+
+            $options[$term->term_id] = [
+                'url' => get_term_link($term),
+                'label' => $term->name . ' (' . \number_format_i18n($term->count) . ')',
+            ];
+        }
+
+        $options[0] = [
+            'url' => \get_post_type_archive_link(OfficialBoardRegistrar::POST_TYPE),
+            'label' => __('Všetky', 'ocu-theme') . ' (' . \number_format_i18n($count) . ')',
+        ];
+
+        return $options;
+    }
+
+    private function selectedTerm(): int
+    {
+        $term = get_queried_object();
+
+        if ($term instanceof \WP_Term) {
+            return $term->term_id;
+        }
+
+        return 0;
     }
 }

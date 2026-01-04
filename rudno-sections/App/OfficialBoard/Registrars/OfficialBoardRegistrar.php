@@ -34,16 +34,48 @@ final class OfficialBoardRegistrar
             'menu_position' => 36,
             'public'      => true,
             'has_archive' => __('uradna-tabula', 'ocu-theme'),
-            'rewrite' => array('slug' => __('uradna-tabula', 'ocu-theme'), 'with_front' => false),
+            'rewrite' => ['slug' => __('uradna-tabula/%document-type%/dokument', 'ocu-theme'), 'with_front' => true],
+            'taxonomies' => [OfficialBoardTaxonomyRegistrar::TAXONOMY],
             'supports' => [
-                'title'
+                'title',
+                'excerpt'
             ],
         ]);
 
+        $app->registerPostTypeLinkFilter(static function (string $permalink, mixed $postId): string
+        {
+            if (str_contains($permalink, '%document-type%')) {
+                // Get post
+                $post = get_post($postId);
+                if ($post && self::POST_TYPE === $post->post_type) {
+                    // Get taxonomy terms
+                    $terms = wp_get_object_terms($post->ID, OfficialBoardTaxonomyRegistrar::TAXONOMY);
+
+                    if (!empty($terms) && !is_wp_error($terms) && is_object($terms[0])) {
+                        $taxonomy_slug = $terms[0]->slug;
+                    } else {
+                        $taxonomy_slug = 'nezaradene';
+                    }
+
+                    $permalink = str_replace('%document-type%', $taxonomy_slug, $permalink);
+                }
+            }
+
+            return $permalink;
+        });
+
         $app->registerPreGetPostsCb(static function (WP_Query $query): void {
+            if ($query->get('post_type') !== OfficialBoardRegistrar::POST_TYPE) {
+                return;
+            }
+
+            // disable search template and meta resolving on web when searching on archive
+            if (! is_admin() && $query->is_archive() && $query->is_main_query() && $query->is_search()) {
+                $query->is_search = false;
+            }
+
             if (
                 is_admin() &&
-                $query->get('post_type') === OfficialBoardRegistrar::POST_TYPE &&
                 $query->get('orderby') === 'date_publish'
             ) {
                 $query->set('meta_key', '_date_publish');
@@ -53,7 +85,6 @@ final class OfficialBoardRegistrar
 
             if (
                 is_admin() &&
-                $query->get('post_type') === OfficialBoardRegistrar::POST_TYPE &&
                 $query->get('orderby') === 'date_unpublish'
             ) {
                 $query->set('meta_key', '_date_unpublish');
@@ -62,7 +93,7 @@ final class OfficialBoardRegistrar
             }
 
             if (! is_admin() && $query->is_main_query() && $query->is_archive()) {
-                $query->set('posts_per_page', 1); // optional
+                $query->set('posts_per_page', 12); // optional
 
                 $today = \date('Y-m-d H:i') . ':00';
 

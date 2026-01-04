@@ -36,12 +36,24 @@ final class Application
      */
     private array $preGetPostsCbs;
 
+    /**
+     * @var array<array-key, \Closure(string, mixed): string>
+     */
+    private array $postTypeLinkCbs;
+
+    /**
+     * @var array<array-key, \Closure>
+     */
+    private array $templateRedirectActionCbs;
+
     private function __construct()
     {
         $this->initCbs = [];
         $this->serviceProviders = [];
         $this->addMetaBoxesActionCbs = [];
         $this->preGetPostsCbs = [];
+        $this->templateRedirectActionCbs = [];
+        $this->postTypeLinkCbs = [];
 
         $this->serviceContainer = new ServiceContainer();
     }
@@ -68,6 +80,8 @@ final class Application
         $this->callInit();
         $this->callAddMetaBoxesAction();
         $this->callPreGetPostsAction();
+        $this->callTemplateRedirectAction();
+        $this->callPostTypeLinkFilter();
 
         $this->serviceProviders = [];
     }
@@ -155,14 +169,37 @@ final class Application
         $this->preGetPostsCbs[] = $cb;
     }
 
+    /**
+     * @param \Closure(self): void $cb
+     */
+    public function registerTemplateRedirectAction(\Closure $cb): void
+    {
+        $this->templateRedirectActionCbs[] = $cb;
+    }
+
+    /**
+     * @param \Closure(string, mixed): string $cb
+     */
+    public function registerPostTypeLinkFilter(\Closure $cb): void
+    {
+        $this->postTypeLinkCbs[] = $cb;
+    }
+
+    private function callTemplateRedirectAction(): void
+    {
+        add_action('template_redirect', function () {
+            foreach ($this->templateRedirectActionCbs as $cb) {
+                $cb($this);
+            }
+        });
+    }
+
     private function callInit(): void
     {
         add_action('init', function (...$args): void {
             foreach ($this->initCbs as $cb) {
                 $cb($this, ...$args);
             }
-
-            $this->initCbs = [];
         });
     }
 
@@ -172,8 +209,6 @@ final class Application
             foreach ($this->addMetaBoxesActionCbs as $cb) {
                 $cb($this, ...$args);
             }
-
-            $this->addMetaBoxesActionCbs = [];
         });
     }
 
@@ -183,8 +218,17 @@ final class Application
             foreach ($this->preGetPostsCbs as $cb) {
                 $cb($query);
             }
-
-            $this->preGetPostsCbs = [];
         });
+    }
+
+    private function callPostTypeLinkFilter(): void
+    {
+        add_filter('post_type_link', function (string $permalink, mixed $postId): string {
+            foreach ($this->postTypeLinkCbs as $cb) {
+                $permalink = $cb($permalink, $postId);
+            }
+
+            return $permalink;
+        }, 10, 2);
     }
 }

@@ -2,9 +2,10 @@
   Page header
 
   Accepts optional properties:
-    $subtitle = html string or null
-    $docsfilter = true or false or null
-    $with_search = true or null
+    $title = html string or null (optional)
+    $subtitle = html string or null (optional)
+    $docsfilter = true or false or null (optional)
+    $with_search = true or null (optional)
 
 --}}
 
@@ -39,7 +40,7 @@ $with_search ??= null;
     @endif
 
     <div class="b-page-header__container">
-      <h1 class="b-page-header__title @if($docsfilter || $with_search) mb-4 @endif" id="page-headline">{!! $globalDataResolver->title() !!}</h1>
+      <h1 class="b-page-header__title @if($docsfilter || $with_search) mb-4 @endif" id="page-headline">{!! $title ?? $globalDataResolver->title() !!}</h1>
       @isset($subtitle)
         <p class="b-page-header__subtitle">{!! $subtitle !!}</p>
       @endisset
