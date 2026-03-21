@@ -56,10 +56,10 @@ class TaxonomyDocumentType extends Composer
                         'include_children' => false
                     ]
                 ],
-                'meta_key' => ['_date', '_file'],
+                'meta_key' => '_date',
                 'orderby'  => [
                     'meta_value' => 'DESC',
-                    'post_date' => 'DESC'
+                    'modified' => 'DESC'
                 ],
                 'meta_query'  =>  [
                     [
@@ -86,10 +86,10 @@ class TaxonomyDocumentType extends Composer
                         'include_children' => false
                     ]
                 ],
-                'meta_key' => ['_date', '_file'],
+                'meta_key' => '_date',
                 'orderby'  => [
                     'meta_value' => 'DESC',
-                    'post_date' => 'DESC'
+                    'modified' => 'DESC'
                 ],
             ];
         }

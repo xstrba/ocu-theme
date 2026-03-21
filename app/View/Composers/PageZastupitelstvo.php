@@ -12,6 +12,7 @@ class PageZastupitelstvo extends Composer
     {
         return [
             'seatingQuery' => $this->seatingQuery(),
+            'seating' => $this->seating(),
         ];
     }
 
@@ -21,8 +22,10 @@ class PageZastupitelstvo extends Composer
             'posts_per_page' => '5',
             'post_type' => 'rudno-dokumenty',
             'meta_key' => '_date',
-            'orderby'  => 'meta_value',
-            'order'    => 'DESC',
+            'orderby'  => [
+                'meta_value' => 'DESC',
+                'modified' => 'DESC'
+            ],
             'tax_query' => array(
                 array(
                     'taxonomy' => 'document-type',
@@ -33,5 +36,30 @@ class PageZastupitelstvo extends Composer
         );
 
         return new \WP_Query( $args );
+    }
+
+    /**
+     * @return int|\WP_Post|null
+     */
+    public function seating()
+    {
+        $args = [
+            'posts_per_page' => '1',
+            'post_type' => 'rudno-seating',
+            'meta_key' => '_date',
+            'orderby'  => 'meta_value',
+            'order'    => 'DESC',
+            'meta_query' => [
+                [
+                    'key' => '_date',
+                    'value' => date('Y-m-d'),
+                    'compare' => '>=',
+                ]
+            ]
+        ];
+
+        $posts = get_posts($args);
+
+        return empty($posts) ? null : $posts[0];
     }
 }

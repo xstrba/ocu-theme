@@ -77,8 +77,10 @@ class PageStarosta extends Composer
             'posts_per_page' => '5',
             'post_type' => 'rudno-dokumenty',
             'meta_key' => '_date',
-            'orderby'  => 'meta_value',
-            'order'    => 'DESC',
+            'orderby'  => [
+                'meta_value' => 'DESC',
+                'modified' => 'DESC'
+            ],
             'tax_query' => array(
                 array(
                     'taxonomy' => 'document-type',

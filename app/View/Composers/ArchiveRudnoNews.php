@@ -19,8 +19,11 @@ class ArchiveRudnoNews extends Composer
         $args = array(
             'numberposts' => '10',
             'post_type' => 'rudno-dokumenty',
-            'orderby' => 'modified',
-            'order' => 'DESC'
+            'meta_key' => '_date',
+            'orderby' => [
+                'meta_value' => 'DESC',
+                'modified' => 'DESC'
+            ]
         );
 
         return get_posts($args);
