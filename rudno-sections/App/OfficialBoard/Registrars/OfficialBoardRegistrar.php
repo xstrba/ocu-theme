@@ -95,23 +95,36 @@ final class OfficialBoardRegistrar
             if (! is_admin() && $query->is_main_query() && $query->is_archive()) {
                 $query->set('posts_per_page', 12); // optional
 
-                $today = \date('Y-m-d H:i') . ':00';
+                $filterYear = $query->get('filter_year');
 
-                $meta_query = [
-                    'relation' => 'AND',
-                    [
-                        'key'     => '_date_publish',
-                        'value'   => $today,
-                        'compare' => '<=',
-                        'type'    => 'DATE',
-                    ],
-                    [
-                        'key'     => '_date_unpublish',
-                        'value'   => $today,
-                        'compare' => '>=',
-                        'type'    => 'DATE',
-                    ],
-                ];
+                if ($filterYear) {
+                    $meta_query = [
+                        [
+                            'key'     => '_date_publish',
+                            'value'   => ["{$filterYear}-01-01 00:00:00", "{$filterYear}-12-31 23:59:59"],
+                            'compare' => 'BETWEEN',
+                            'type'    => 'DATETIME',
+                        ],
+                    ];
+                } else {
+                    $today = \date('Y-m-d H:i') . ':00';
+
+                    $meta_query = [
+                        'relation' => 'AND',
+                        [
+                            'key'     => '_date_publish',
+                            'value'   => $today,
+                            'compare' => '<=',
+                            'type'    => 'DATE',
+                        ],
+                        [
+                            'key'     => '_date_unpublish',
+                            'value'   => $today,
+                            'compare' => '>=',
+                            'type'    => 'DATE',
+                        ],
+                    ];
+                }
 
                 $query->set('meta_query', $meta_query);
 
@@ -120,5 +133,37 @@ final class OfficialBoardRegistrar
                 $query->set('order', 'DESC');
             }
         });
+
+        add_filter('posts_where', static function (string $where, \WP_Query $query): string {
+            if (is_admin() || ! $query->is_main_query() || ! $query->get('s')) {
+                return $where;
+            }
+
+            if ($query->get('post_type') !== self::POST_TYPE) {
+                return $where;
+            }
+
+            global $wpdb;
+            // Safety: Truncate search input and limit consecutive spaces
+            $search = trim(mb_substr($query->get('s'), 0, 150));
+            
+            $terms = explode(' ', $search);
+            $terms = array_filter($terms, fn($t) => mb_strlen($t) >= 3); // Remove terms shorter than 3 characters
+            $terms = array_slice($terms, 0, 10); // Safety: Limit to first 10 terms
+
+            if (!empty($terms)) {
+                $searchParts = [];
+                foreach ($terms as $term) {
+                    $searchLike = '%' . $wpdb->esc_like($term) . '%';
+                    $searchParts[] = $wpdb->prepare(
+                        "($wpdb->posts.post_title LIKE %s OR $wpdb->posts.post_excerpt LIKE %s OR $wpdb->posts.post_content LIKE %s)",
+                        $searchLike, $searchLike, $searchLike
+                    );
+                }
+                $where .= " AND (" . implode(" AND ", $searchParts) . ")";
+            }
+
+            return $where;
+        }, 10, 2);
     }
 }

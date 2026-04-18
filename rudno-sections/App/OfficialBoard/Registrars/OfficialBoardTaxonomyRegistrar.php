@@ -51,23 +51,36 @@ final class OfficialBoardTaxonomyRegistrar
             if (! is_admin() && $query->is_main_query() && $query->is_archive() && $query->is_tax()) {
                 $query->set('posts_per_page', 12); // optional
 
-                $today = \date('Y-m-d H:i') . ':00';
+                $filterYear = $query->get('filter_year');
 
-                $meta_query = [
-                    'relation' => 'AND',
-                    [
-                        'key'     => '_date_publish',
-                        'value'   => $today,
-                        'compare' => '<=',
-                        'type'    => 'DATE',
-                    ],
-                    [
-                        'key'     => '_date_unpublish',
-                        'value'   => $today,
-                        'compare' => '>=',
-                        'type'    => 'DATE',
-                    ],
-                ];
+                if ($filterYear) {
+                    $meta_query = [
+                        [
+                            'key'     => '_date_publish',
+                            'value'   => ["{$filterYear}-01-01 00:00:00", "{$filterYear}-12-31 23:59:59"],
+                            'compare' => 'BETWEEN',
+                            'type'    => 'DATETIME',
+                        ],
+                    ];
+                } else {
+                    $today = \date('Y-m-d H:i') . ':00';
+
+                    $meta_query = [
+                        'relation' => 'AND',
+                        [
+                            'key'     => '_date_publish',
+                            'value'   => $today,
+                            'compare' => '<=',
+                            'type'    => 'DATETIME',
+                        ],
+                        [
+                            'key'     => '_date_unpublish',
+                            'value'   => $today,
+                            'compare' => '>=',
+                            'type'    => 'DATETIME',
+                        ],
+                    ];
+                }
 
                 $query->set('meta_query', $meta_query);
 
