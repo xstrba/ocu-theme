@@ -20,8 +20,6 @@ class ArchiveOcuOfficialBoard extends Composer
 
     protected function merge(): array
     {
-        $this->seedTestData();
-
         return \array_merge(parent::merge(), [
             'title' => $this->title(),
             'term_options' => $this->getTermOptions(),
@@ -191,7 +189,7 @@ class ArchiveOcuOfficialBoard extends Composer
         ];
 
         foreach ($terms as $term) {
-            if ($term->count > 0) {       
+            if ($term->count > 0) {
                 $options[$term->term_id] = [
                     'url' => add_query_arg($urlArgs, get_term_link($term)),
                     'label' => $term->name . ' (' . \number_format_i18n($term->count) . ')',
@@ -215,7 +213,7 @@ class ArchiveOcuOfficialBoard extends Composer
 
         // Base where for filtering years (respects search and category)
         $where = $this->getBaseWhere($search);
-        
+
         if ($selectedTerm) {
             $where .= $wpdb->prepare(
                 " AND p.ID IN (SELECT object_id FROM {$wpdb->term_relationships} tr WHERE tr.term_taxonomy_id IN (SELECT term_taxonomy_id FROM {$wpdb->term_taxonomy} tt WHERE tt.term_id = %d))",
@@ -266,7 +264,7 @@ class ArchiveOcuOfficialBoard extends Composer
         $currentYear = (int) date('Y');
         // If no posts exist yet, use current year as the only option
         $minYear = $minYear ?: $currentYear;
-        
+
         // Ensure we don't include future years and the range is descending
         $allYears = range($currentYear, $minYear);
 
@@ -308,7 +306,7 @@ class ArchiveOcuOfficialBoard extends Composer
         if ($search) {
             // Safety: Truncate search input and limit consecutive spaces
             $search = trim(mb_substr($search, 0, 150));
-            
+
             // Split search into terms (matching standard WordPress behavior)
             $terms = explode(' ', $search);
             $terms = array_filter($terms, fn($t) => mb_strlen($t) >= 3); // Remove terms shorter than 3 characters
@@ -346,7 +344,7 @@ class ArchiveOcuOfficialBoard extends Composer
             $today = \date('Y-m-d H:i') . ':00';
             // Align with Registrar comparison (using string comparison for speed, mirroring WP logic)
             $where .= $wpdb->prepare(
-                " AND (pm_pub.meta_value IS NOT NULL AND pm_pub.meta_value != '' AND pm_pub.meta_value <= %s) 
+                " AND (pm_pub.meta_value IS NOT NULL AND pm_pub.meta_value != '' AND pm_pub.meta_value <= %s)
                   AND (pm_unpub.meta_value IS NOT NULL AND pm_unpub.meta_value != '' AND pm_unpub.meta_value >= %s)",
                 $today, $today
             );
@@ -394,15 +392,15 @@ class ArchiveOcuOfficialBoard extends Composer
         ]);
 
         $currentYear = (int) date('Y');
-        
+
         for ($offset = 0; $offset <= 2; $offset++) {
             $year = $currentYear - $offset;
-            
+
             for ($i = 1; $i <= 40; $i++) {
                 $isActive = ($i <= 20);
-                
+
                 $title = "Testovací dokument {$year}-" . ($isActive ? 'A' : 'I') . "-{$i}";
-                
+
                 $postId = wp_insert_post([
                     'post_title' => $title,
                     'post_type' => OfficialBoardRegistrar::POST_TYPE,
